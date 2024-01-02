@@ -1,0 +1,9 @@
+nav{
+    background-color: red;
+}
+
+.container-fluid{
+    display: flex;
+    flex-direction: row;
+    justify-content:space-evenly;
+}
