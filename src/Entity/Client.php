@@ -6,32 +6,48 @@ use App\Repository\ClientRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\UX\Turbo\Attribute\Broadcast;
+use Symfony\Component\Validator\Constraints as Assert;
+
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+
+
+
+
 
 #[ORM\Entity(repositoryClass: ClientRepository::class)]
 #[Broadcast]
-class Client
+class Client  implements PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\NotBlank()]
     private ?string $nom = null;
 
-    #[ORM\Column(length: 255)]
+    
+    #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\NotBlank()]
     private ?string $prenom = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(type: 'text', length: 255)]
+    #[Assert\NotBlank()]
     private ?string $adresse = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(type: 'text', length: 255)]
+    #[Assert\NotBlank()]
     private ?string $email = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\NotBlank()]
     private ?string $password = null;
 
+    private ?string $plainPassword = null;
+
     #[ORM\Column(type: Types::TEXT)]
+    #[Assert\NotBlank()]
     private ?string $telephone = null;
 
     public function getId(): ?int
@@ -95,6 +111,18 @@ class Client
     public function setPassword(string $password): static
     {
         $this->password = $password;
+
+        return $this;
+    }
+
+    public function getPlainPassword(): ?string
+    {
+        return $this->plainPassword;
+    }
+
+    public function setPlainPassword(string $plainPassword): static
+    {
+        $this->password = $plainPassword;
 
         return $this;
     }

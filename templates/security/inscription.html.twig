@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} My_Shop - inscription {% endblock %}
+
+{% block body %}
+
+<div class="container">
+    <h1>Bienvenue sur la page d'inscription !</h1>
+
+    {% for message in app.flashes('succes') %}
+        <div class="alert alert-success mt-4">
+            {{ message }}
+        </div>
+    {% endfor %}
+    
+    {{form_start(form)}}
+
+    {{form_end(form)}}
+</div>
+{% endblock %}
