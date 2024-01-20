@@ -36,7 +36,7 @@ class Client  implements PasswordAuthenticatedUserInterface
     #[Assert\NotBlank()]
     private ?string $adresse = null;
 
-    #[ORM\Column(type: 'text', length: 255)]
+    #[ORM\Column(type: 'text', length: 255, unique:true)]
     #[Assert\NotBlank()]
     private ?string $email = null;
 
@@ -122,7 +122,7 @@ class Client  implements PasswordAuthenticatedUserInterface
 
     public function setPlainPassword(string $plainPassword): static
     {
-        $this->password = $plainPassword;
+        $this->plainPassword = $plainPassword;
 
         return $this;
     }

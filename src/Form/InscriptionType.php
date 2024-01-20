@@ -5,13 +5,16 @@ namespace App\Form;
 use App\Entity\Client;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Validator\Constraints as Assert;
+
 
 class InscriptionType extends AbstractType
 {
@@ -83,39 +86,7 @@ class InscriptionType extends AbstractType
             ]
         ] )
 
-        ->add('password', PasswordType::class, [
-            'attr' =>[
-                'class' => 'form-control'
-            ],
-
-            'label' => 'Mot de passe',
-
-            'label_attr' => [
-                'class' => 'form_label mt-4'
-            ],
-            
-            'constraints' => [
-                new Assert\NotBlank()
-            ]
-        ])
-
-        ->add('plainPassword', PasswordType::class, [
-            'attr' =>[
-                'class' => 'form-control'
-            ],
-
-            'label' => 'Confirmation de mot de passe',
-
-            'label_attr' => [
-                'class' => 'form_label mt-4'
-            ],
-            
-            'constraints' => [
-                new Assert\NotBlank()
-            ]
-        ])
-
-
+        
         ->add('telephone', TextType::class, [
             'attr' => [
                 'class' => 'form-control'
@@ -126,6 +97,43 @@ class InscriptionType extends AbstractType
             'label_attr' => [
                 'class' => 'form_label mt-4'
             ]
+        ])
+
+        ->add('plainPassword', RepeatedType::class, [
+            'type' => PasswordType::class,
+
+            'invalid_message' => 'Les deux mots de passe de correspondent pas.',
+            
+            'options' => [
+                'attr' => [
+                    'class' => 'password-field'
+            ]],
+            
+            'required' => true,
+
+            'first_options'  => [
+                'label' => 'Mot de Passe',
+                'attr' => [
+                    'class' => 'form-control',
+                ],
+            ],
+
+            'label_attr' => [
+                'class' => 'form_label mt-4',
+            ],
+
+            'second_options' => [
+                'label' => 'Confirmation du mot de passe',
+                'attr' => [
+                    'class' => 'form-control',
+                ],
+            ],
+
+            'label_attr' => [
+                'class' => 'form_label mt-4',
+            ],
+
+           
         ])
 
         ->add('Submit', SubmitType::class, [
