@@ -23,40 +23,31 @@ class SecurityController extends AbstractController
     ): Response
     {
         $client = new Client();
+        $client->setRoles(['ROLE_USER']);
 
         $form = $this->createForm(InscriptionType::class, $client);
         $form->handleRequest($request);
-        $client = $form->getData();
-        dd($form);
-        if($form->isSubmitted() and $form->isValid()){
-            $client = $form->getData();
-            
-            $plainpassword = $form->getData()->getPassword();
+       
+         // verification si le formulaire est soumis et s'il est valide
+        if($form->isSubmitted() and $form->isValid() ){
 
+            $plainpassword = $client->getPlainPassword();
             // hashage du mot de passe
-           $password = $passwordHasher->hashPassword($client, $client->getPlainPassword());
-           $client->getPassword($client->setPassword($password));
-            dd($password);
-            //sauvegarder le client
-      
-            //
-           /*  $manager->persist($client);
-            $manager->flush();
-            if($password != null)
-            {
+           $password = $passwordHasher->hashPassword($client,  $plainpassword);
+           $client->setPassword($password);
+
+                //sauvegarder le client
+                $client = $form->getData();
+               
+                $manager->persist($client);
+                $manager->flush();
+    
+                // message
                 $this->addFlash(
                     'success',
                     'Votre compte a bien été créer!'
                 );
 
-            }else{
-                $this->addFlash(
-                    'success',
-                    'Votre compte a bien été créer!pas de mot de passe'
-                );
-            }
-            // message
-          */
         }
 
         return $this->render('security/inscription.html.twig', [

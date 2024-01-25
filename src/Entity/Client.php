@@ -7,13 +7,11 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\UX\Turbo\Attribute\Broadcast;
 use Symfony\Component\Validator\Constraints as Assert;
-
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 
-
-
-
+#[UniqueEntity('email')]
 #[ORM\Entity(repositoryClass: ClientRepository::class)]
 #[Broadcast]
 class Client  implements PasswordAuthenticatedUserInterface
@@ -36,15 +34,20 @@ class Client  implements PasswordAuthenticatedUserInterface
     #[Assert\NotBlank()]
     private ?string $adresse = null;
 
-    #[ORM\Column(type: 'text', length: 255, unique:true)]
+    #[ORM\Column(type: 'text', length: 255)]
     #[Assert\NotBlank()]
     private ?string $email = null;
 
     #[ORM\Column(type: 'string', length: 255)]
     #[Assert\NotBlank()]
-    private ?string $password = null;
+    private ?string $password = 'password';
 
     private ?string $plainPassword = null;
+
+    #[ORM\Column(type: 'json')]
+    #[Assert\NotNull()]
+    private array $roles = [];
+
 
     #[ORM\Column(type: Types::TEXT)]
     #[Assert\NotBlank()]
@@ -126,6 +129,22 @@ class Client  implements PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    public function getRoles(): array
+    {
+        $roles = $this->roles;
+        $roles[] = 'ROLE_USER';
+
+        return array_unique($roles);
+    }
+
+    public function setRoles(array $roles): self
+    {
+        $this->roles = $roles;
+
+        return $this;
+    }
+
 
     public function getTelephone(): ?string
     {

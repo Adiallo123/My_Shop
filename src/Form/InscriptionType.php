@@ -5,7 +5,6 @@ namespace App\Form;
 use App\Entity\Client;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
@@ -82,7 +81,7 @@ class InscriptionType extends AbstractType
             
             'constraints' => [
                 new Assert\NotBlank(),
-                new Assert\Email()
+                new Assert\Email(),
             ]
         ] )
 
@@ -99,7 +98,7 @@ class InscriptionType extends AbstractType
             ]
         ])
 
-        ->add('plainPassword', RepeatedType::class, [
+       ->add('plainPassword', RepeatedType::class, [
             'type' => PasswordType::class,
 
             'invalid_message' => 'Les deux mots de passe de correspondent pas.',
@@ -109,7 +108,7 @@ class InscriptionType extends AbstractType
                     'class' => 'password-field'
             ]],
             
-            'required' => true,
+           'required' => true,
 
             'first_options'  => [
                 'label' => 'Mot de Passe',
@@ -134,7 +133,7 @@ class InscriptionType extends AbstractType
             ],
 
            
-        ])
+        ]) 
 
         ->add('Submit', SubmitType::class, [
             'attr' => [
