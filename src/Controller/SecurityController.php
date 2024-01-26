@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Client;
+use App\Form\ConnexionType;
 use App\Form\InscriptionType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -10,9 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
-
-
-
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class SecurityController extends AbstractController
 {
@@ -52,6 +51,15 @@ class SecurityController extends AbstractController
 
         return $this->render('security/inscription.html.twig', [
             'form' => $form,
+        ]);
+    }
+
+    #[Route('/connexion', name: 'security.connexion', methods:['GET', 'POST'])]
+    public function connexion(AuthenticationUtils $authenticationUtils): Response{
+       
+        return $this->render('security/connexion.html.twig', [
+            'last_username' => $authenticationUtils->getLastUsername(),
+                'error'     => $authenticationUtils->getLastAuthenticationError()
         ]);
     }
 }
