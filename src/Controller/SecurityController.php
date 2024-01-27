@@ -15,6 +15,17 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class SecurityController extends AbstractController
 {
+
+    #[Route('/connexion', name: 'security.connexion', methods:['GET', 'POST'])]
+    public function connexion(AuthenticationUtils $authenticationUtils): Response{
+       
+        return $this->render('security/connexion.html.twig', [
+            'last_username' => $authenticationUtils->getLastUsername(),
+            'error'     => $authenticationUtils->getLastAuthenticationError()
+        ]);
+    }
+
+
     #[Route('/inscription', name: 'security.inscription', methods:['GET', 'POST'])]
     public function inscription(Request $request, UserPasswordHasherInterface $passwordHasher, 
     EntityManagerInterface $manager,
@@ -54,12 +65,5 @@ class SecurityController extends AbstractController
         ]);
     }
 
-    #[Route('/connexion', name: 'security.connexion', methods:['GET', 'POST'])]
-    public function connexion(AuthenticationUtils $authenticationUtils): Response{
-       
-        return $this->render('security/connexion.html.twig', [
-            'last_username' => $authenticationUtils->getLastUsername(),
-                'error'     => $authenticationUtils->getLastAuthenticationError()
-        ]);
-    }
+  
 }

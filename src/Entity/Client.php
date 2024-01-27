@@ -9,12 +9,12 @@ use Symfony\UX\Turbo\Attribute\Broadcast;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
-
+use Symfony\Component\Security\Core\User\UserInterface;
 
 #[UniqueEntity('email')]
 #[ORM\Entity(repositoryClass: ClientRepository::class)]
 #[Broadcast]
-class Client  implements PasswordAuthenticatedUserInterface
+class Client  implements UserInterface , PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -130,9 +130,37 @@ class Client  implements PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    public function getTelephone(): ?string
+    {
+        return $this->telephone;
+    }
+
+    public function setTelephone(string $telephone): static
+    {
+        $this->telephone = $telephone;
+
+        return $this;
+    }
+
+
+    
+    /**
+     * The public representation of the user (e.g. a username, an email address, etc.)
+     *
+     * @see UserInterface
+     */
+    public function getUserIdentifier(): string
+    {
+        return (string) $this->email;
+    }
+
+    /**
+     * @see UserInterface
+     */
     public function getRoles(): array
     {
         $roles = $this->roles;
+        // guarantee every user at least has ROLE_USER
         $roles[] = 'ROLE_USER';
 
         return array_unique($roles);
@@ -145,16 +173,25 @@ class Client  implements PasswordAuthenticatedUserInterface
         return $this;
     }
 
-
-    public function getTelephone(): ?string
+  
+    /**
+     * Returning a salt is only needed if you are not using a modern
+     * hashing algorithm (e.g. bcrypt or sodium) in your security.yaml.
+     *
+     * @see UserInterface
+     */
+    public function getSalt(): ?string
     {
-        return $this->telephone;
+        return null;
     }
 
-    public function setTelephone(string $telephone): static
+    /**
+     * @see UserInterface
+     */
+    public function eraseCredentials(): void
     {
-        $this->telephone = $telephone;
-
-        return $this;
+        // If you store any temporary, sensitive data on the user, clear it here
+        // $this->plainPassword = null;
     }
+
 }
