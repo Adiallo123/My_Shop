@@ -65,7 +65,7 @@ class SecurityController extends AbstractController
         ]);
     }
 
-    #[Route('/deconnexion', name: 'security.deconexion', methods:['GET', 'POST'])]
+    #[Route('/deconnexion', name: 'security.logout', methods:['GET', 'POST'])]
     public function logout(): Response{
         return $this->render('home/index.html.twig');
     }
